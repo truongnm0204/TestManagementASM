@@ -51,8 +51,8 @@ public class MainViewModel : ViewModelBase
 
         UpdateCurrentUserInfo();
 
-        // Navigate to Subjects by default
-        _navigationService.NavigateTo<SubjectListViewModel>();
+        // Navigate to Users by default
+        _navigationService.NavigateTo<UserListViewModel>();
     }
 
     private void OnCurrentViewModelChanged()

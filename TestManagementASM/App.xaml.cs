@@ -49,12 +49,21 @@ public partial class App : Application
         // If login successful, show main window
         if (_authStore.IsLoggedIn)
         {
-            var mainViewModel = new MainViewModel(_navigationStore, _authStore, navigationService, authService);
-            var mainWindow = new MainWindow
+            try
             {
-                DataContext = mainViewModel
-            };
-            mainWindow.Show();
+                var mainViewModel = new MainViewModel(_navigationStore, _authStore, navigationService, authService);
+                var mainWindow = new MainWindow
+                {
+                    DataContext = mainViewModel
+                };
+                mainWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi mở MainWindow: {ex.Message}\n\n{ex.StackTrace}",
+                    "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                Shutdown();
+            }
         }
         else
         {
@@ -78,10 +87,13 @@ public partial class App : Application
 
     private ViewModelBase CreateViewModel(Type viewModelType)
     {
+        // Create a NEW DbContext instance for each ViewModel to avoid disposed context issues
+        var dbContext = new TestManagementDbContext();
+
         // Services needed for ViewModels
-        IAuthenticationService authService = new AuthenticationService(_dbContext, _authStore);
-        ISubjectService subjectService = new SubjectService(_dbContext, _authStore);
-        IUserService userService = new UserService(_dbContext);
+        IAuthenticationService authService = new AuthenticationService(dbContext, _authStore);
+        ISubjectService subjectService = new SubjectService(dbContext, _authStore);
+        IUserService userService = new UserService(dbContext);
         INavigationService navigationService = new NavigationService(_navigationStore, CreateViewModel);
 
         // Factory method to create ViewModels
