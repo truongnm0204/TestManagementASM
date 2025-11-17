@@ -169,11 +169,12 @@
                                 Padding="15,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="3*"/>
+                                    <ColumnDefinition Width="2.5*"/>
+                                    <ColumnDefinition Width="1*"/>
                                     <ColumnDefinition Width="2*"/>
                                     <ColumnDefinition Width="1.5*"/>
                                     <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="2*"/>
+                                    <ColumnDefinition Width="1.5*"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Grid.Column="0"
@@ -181,20 +182,25 @@
                                            FontWeight="Bold"
                                            Foreground="#1565C0"/>
                                 <TextBlock Grid.Column="1"
+                                           Text="Lần thử"
+                                           FontWeight="Bold"
+                                           Foreground="#1565C0"
+                                           TextAlignment="Center"/>
+                                <TextBlock Grid.Column="2"
                                            Text="Thời gian làm bài"
                                            FontWeight="Bold"
                                            Foreground="#1565C0"/>
-                                <TextBlock Grid.Column="2"
+                                <TextBlock Grid.Column="3"
                                            Text="Điểm"
                                            FontWeight="Bold"
                                            Foreground="#1565C0"
                                            TextAlignment="Center"/>
-                                <TextBlock Grid.Column="3"
+                                <TextBlock Grid.Column="4"
                                            Text="Trạng thái"
                                            FontWeight="Bold"
                                            Foreground="#1565C0"
                                            TextAlignment="Center"/>
-                                <TextBlock Grid.Column="4"
+                                <TextBlock Grid.Column="5"
                                            Text="Thời lượng"
                                            FontWeight="Bold"
                                            Foreground="#1565C0"
@@ -213,25 +219,39 @@
                                                 Padding="15,12">
                                             <Grid>
                                                 <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="3*"/>
+                                                    <ColumnDefinition Width="2.5*"/>
+                                                    <ColumnDefinition Width="1*"/>
                                                     <ColumnDefinition Width="2*"/>
                                                     <ColumnDefinition Width="1.5*"/>
                                                     <ColumnDefinition Width="1.5*"/>
-                                                    <ColumnDefinition Width="2*"/>
+                                                    <ColumnDefinition Width="1.5*"/>
                                                 </Grid.ColumnDefinitions>
 
                                                 <TextBlock Grid.Column="0"
-                                                           Text="{Binding Test.TestName}"
+                                                           Text="{Binding Attempt.Test.TestName}"
                                                            FontWeight="SemiBold"
                                                            VerticalAlignment="Center"/>
 
-                                                <TextBlock Grid.Column="1"
-                                                           Text="{Binding StartTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"
+                                                <Border Grid.Column="1"
+                                                        Background="#E3F2FD"
+                                                        CornerRadius="12"
+                                                        Padding="8,4"
+                                                        HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding AttemptLabel}"
+                                                               FontSize="12"
+                                                               FontWeight="Bold"
+                                                               Foreground="#1E88E5"
+                                                               TextAlignment="Center"/>
+                                                </Border>
+
+                                                <TextBlock Grid.Column="2"
+                                                           Text="{Binding Attempt.StartTime, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"
                                                            Foreground="#666"
                                                            VerticalAlignment="Center"/>
 
-                                                <TextBlock Grid.Column="2"
-                                                           Text="{Binding Score, StringFormat={}{0}/100}"
+                                                <TextBlock Grid.Column="3"
+                                                           Text="{Binding Attempt.Score, StringFormat={}{0}/100}"
                                                            TextAlignment="Center"
                                                            FontWeight="Bold"
                                                            VerticalAlignment="Center">
@@ -240,7 +260,7 @@
                                                             <Setter Property="Foreground"
                                                                     Value="#4CAF50"/>
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Score}">
+                                                                <DataTrigger Binding="{Binding Attempt.Score}">
                                                                     <DataTrigger.Value>
                                                                         <sys:Int32 xmlns:sys="clr-namespace:System;assembly=mscorlib">0</sys:Int32>
                                                                     </DataTrigger.Value>
@@ -252,7 +272,7 @@
                                                     </TextBlock.Style>
                                                 </TextBlock>
 
-                                                <Border Grid.Column="3"
+                                                <Border Grid.Column="4"
                                                         HorizontalAlignment="Center"
                                                         VerticalAlignment="Center"
                                                         CornerRadius="12"
@@ -262,7 +282,7 @@
                                                             <Setter Property="Background"
                                                                     Value="#E8F5E9"/>
                                                             <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding AttemptStatus}"
+                                                                <DataTrigger Binding="{Binding Attempt.AttemptStatus}"
                                                                              Value="In Progress">
                                                                     <Setter Property="Background"
                                                                             Value="#FFF3E0"/>
@@ -270,7 +290,7 @@
                                                             </Style.Triggers>
                                                         </Style>
                                                     </Border.Style>
-                                                    <TextBlock Text="{Binding AttemptStatus}"
+                                                    <TextBlock Text="{Binding Attempt.AttemptStatus}"
                                                                FontSize="12"
                                                                FontWeight="SemiBold">
                                                         <TextBlock.Style>
@@ -278,7 +298,7 @@
                                                                 <Setter Property="Foreground"
                                                                         Value="#4CAF50"/>
                                                                 <Style.Triggers>
-                                                                    <DataTrigger Binding="{Binding AttemptStatus}"
+                                                                    <DataTrigger Binding="{Binding Attempt.AttemptStatus}"
                                                                                  Value="In Progress">
                                                                         <Setter Property="Foreground"
                                                                                 Value="#FF9800"/>
@@ -289,13 +309,13 @@
                                                     </TextBlock>
                                                 </Border>
 
-                                                <TextBlock Grid.Column="4"
+                                                <TextBlock Grid.Column="5"
                                                            TextAlignment="Center"
                                                            Foreground="#666"
                                                            VerticalAlignment="Center">
                                                     <TextBlock.Text>
                                                         <MultiBinding StringFormat="{}{0} phút">
-                                                            <Binding Path="Test.DurationMinutes"/>
+                                                            <Binding Path="Attempt.Test.DurationMinutes"/>
                                                         </MultiBinding>
                                                     </TextBlock.Text>
                                                 </TextBlock>

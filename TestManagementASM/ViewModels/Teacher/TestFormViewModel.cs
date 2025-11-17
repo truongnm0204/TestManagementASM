@@ -34,6 +34,7 @@ public class TestFormViewModel : ViewModelBase
     private bool _isEditMode;
     private bool _isSaving;
     private bool _isLoadingQuestions;
+    private bool _isLoadingClasses;
 
     public Test? CurrentTest
     {
@@ -143,6 +144,12 @@ public class TestFormViewModel : ViewModelBase
         set => SetProperty(ref _isLoadingQuestions, value);
     }
 
+    public bool IsLoadingClasses
+    {
+        get => _isLoadingClasses;
+        set => SetProperty(ref _isLoadingClasses, value);
+    }
+
     public ICommand SaveTestCommand { get; }
     public ICommand CancelCommand { get; }
     public ICommand AddQuestionCommand { get; }
@@ -208,15 +215,32 @@ public class TestFormViewModel : ViewModelBase
     {
         try
         {
-            if (_authStore.CurrentUser == null) return;
+            IsLoadingClasses = true;
+
+            if (_authStore.CurrentUser == null)
+            {
+                MessageBox.Show("Vui lòng đăng nhập để tạo bài thi.", "Thông báo",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             var classes = await _classService.GetTeacherClassesAsync(_authStore.CurrentUser.UserId);
             TeacherClasses = new ObservableCollection<Class>(classes);
+
+            if (TeacherClasses.Count == 0)
+            {
+                MessageBox.Show("Bạn chưa được phân công giảng dạy lớp nào.\nVui lòng liên hệ quản trị viên để được phân công lớp.",
+                    "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Lỗi khi tải danh sách lớp: {ex.Message}", "Lỗi",
+            MessageBox.Show($"Lỗi khi tải danh sách lớp: {ex.Message}\n\nStackTrace: {ex.StackTrace}", "Lỗi",
                 MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsLoadingClasses = false;
         }
     }
 

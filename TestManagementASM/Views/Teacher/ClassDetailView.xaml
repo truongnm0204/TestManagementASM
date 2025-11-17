@@ -73,14 +73,14 @@
                                        Foreground="#666"
                                        Margin="0,0,0,5">
                                 <Run Text="Số sinh viên: "/>
-                                <Run Text="{Binding StudentScores.Count}"
+                                <Run Text="{Binding StudentScores.Count, Mode=OneWay}"
                                      FontWeight="SemiBold"/>
                             </TextBlock>
 
                             <TextBlock FontSize="14"
                                        Foreground="#666">
                                 <Run Text="Số bài thi: "/>
-                                <Run Text="{Binding CurrentClass.Tests.Count}"
+                                <Run Text="{Binding CurrentClass.Tests.Count, Mode=OneWay}"
                                      FontWeight="SemiBold"/>
                             </TextBlock>
                         </StackPanel>

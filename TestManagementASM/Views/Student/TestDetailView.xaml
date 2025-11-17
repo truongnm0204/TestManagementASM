@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d"
              d:DesignHeight="600"
-        d:DesignWidth="900">
+             d:DesignWidth="900">
     <Grid Background="White">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,9 +25,9 @@
                         Cursor="Hand"
                         Margin="0,0,15,0">
                     <TextBlock Text="←"
-                            FontSize="20"
-                            Foreground="White"
-                            FontWeight="Bold"/>
+                               FontSize="20"
+                               Foreground="White"
+                               FontWeight="Bold"/>
                 </Button>
                 <TextBlock Text="CHI TIẾT BÀI THI"
                            FontSize="20"
@@ -39,7 +39,7 @@
 
         <!-- Content -->
         <ScrollViewer Grid.Row="1"
-                VerticalScrollBarVisibility="Auto">
+                      VerticalScrollBarVisibility="Auto">
             <StackPanel Margin="30">
                 <!-- Test Information Card -->
                 <Border Background="White"
@@ -70,55 +70,55 @@
 
                             <!-- Left Column -->
                             <TextBlock Grid.Row="0"
-                                    Grid.Column="0"
-                                    Text="📚 Môn học:"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="0"
+                                       Text="📚 Môn học:"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="0"
-                                    Grid.Column="1"
-                                    Text="{Binding CurrentTest.Class.Subject.SubjectName}"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="1"
+                                       Text="{Binding CurrentTest.Class.Subject.SubjectName}"
+                                       Margin="0,0,0,10"/>
 
                             <TextBlock Grid.Row="1"
-                                    Grid.Column="0"
-                                    Text="🏫 Lớp:"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="0"
+                                       Text="🏫 Lớp:"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="1"
-                                    Grid.Column="1"
-                                    Text="{Binding CurrentTest.Class.ClassName}"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="1"
+                                       Text="{Binding CurrentTest.Class.ClassName}"
+                                       Margin="0,0,0,10"/>
 
                             <TextBlock Grid.Row="2"
-                                    Grid.Column="0"
-                                    Text="⏱️ Thời gian:"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="0"
+                                       Text="⏱️ Thời gian:"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="0,0,0,10">
-                                <Run Text="{Binding CurrentTest.DurationMinutes}"/>
+                                       Grid.Column="1"
+                                       Margin="0,0,0,10">
+                                <Run Text="{Binding CurrentTest.DurationMinutes, Mode=OneWay}"/>
                                 <Run Text=" phút"/>
                             </TextBlock>
 
                             <TextBlock Grid.Row="3"
-                                    Grid.Column="0"
-                                    Text="❓ Số câu hỏi:"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="0"
+                                       Text="❓ Số câu hỏi:"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="3"
-                                    Grid.Column="1"
-                                    Text="{Binding QuestionCount}"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="1"
+                                       Text="{Binding QuestionCount}"
+                                       Margin="0,0,0,10"/>
 
                             <TextBlock Grid.Row="4"
-                                    Grid.Column="0"
-                                    Text="📅 Thời gian mở:"
-                                    FontWeight="SemiBold"
-                                    Margin="0,0,0,10"/>
+                                       Grid.Column="0"
+                                       Text="📅 Thời gian mở:"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,10"/>
                             <TextBlock Grid.Row="4"
-                                    Grid.Column="1"
-                                    Margin="0,0,0,10">
+                                       Grid.Column="1"
+                                       Margin="0,0,0,10">
                                 <Run Text="{Binding CurrentTest.AvailableFrom, StringFormat='dd/MM/yyyy HH:mm'}"/>
                                 <Run Text=" - "/>
                                 <Run Text="{Binding CurrentTest.AvailableTo, StringFormat='dd/MM/yyyy HH:mm'}"/>
@@ -156,12 +156,12 @@
                                             Value="{Binding CanStartTest}"/>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver"
-                                                Value="True">
+                                                 Value="True">
                                             <Setter Property="Background"
                                                     Value="#45A049"/>
                                         </Trigger>
                                         <Trigger Property="IsEnabled"
-                                                Value="False">
+                                                 Value="False">
                                             <Setter Property="Background"
                                                     Value="#CCCCCC"/>
                                             <Setter Property="Cursor"
@@ -223,20 +223,20 @@
 
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Lần thử"
-                                        Binding="{Binding AttemptId}"
-                                        Width="Auto"/>
+                                                    Binding="{Binding AttemptId}"
+                                                    Width="Auto"/>
                                 <DataGridTextColumn Header="Thời gian bắt đầu"
-                                        Binding="{Binding StartTime, StringFormat='dd/MM/yyyy HH:mm'}"
-                                        Width="*"/>
+                                                    Binding="{Binding StartTime, StringFormat='dd/MM/yyyy HH:mm'}"
+                                                    Width="*"/>
                                 <DataGridTextColumn Header="Thời gian kết thúc"
-                                        Binding="{Binding EndTime, StringFormat='dd/MM/yyyy HH:mm'}"
-                                        Width="*"/>
+                                                    Binding="{Binding EndTime, StringFormat='dd/MM/yyyy HH:mm'}"
+                                                    Width="*"/>
                                 <DataGridTextColumn Header="Điểm"
-                                        Binding="{Binding Score}"
-                                        Width="Auto"/>
+                                                    Binding="{Binding Score}"
+                                                    Width="Auto"/>
                                 <DataGridTextColumn Header="Trạng thái"
-                                        Binding="{Binding AttemptStatus}"
-                                        Width="Auto"/>
+                                                    Binding="{Binding AttemptStatus}"
+                                                    Width="Auto"/>
                             </DataGrid.Columns>
                         </DataGrid>
 
@@ -257,11 +257,11 @@
                 Background="#80000000"
                 Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
             <StackPanel HorizontalAlignment="Center"
-                    VerticalAlignment="Center">
+                        VerticalAlignment="Center">
                 <TextBlock Text="Đang tải..."
-                        FontSize="16"
-                        Foreground="White"
-                        FontWeight="Bold"/>
+                           FontSize="16"
+                           Foreground="White"
+                           FontWeight="Bold"/>
             </StackPanel>
         </Border>
     </Grid>

@@ -17,11 +17,19 @@ public class StudentDetailViewModel : ViewModelBase
 
     private User? _currentStudent;
     private Class? _currentClass;
-    private ObservableCollection<TestAttempt> _testAttempts = new();
+    private ObservableCollection<TestAttemptInfo> _testAttempts = new();
     private double _averageScore;
     private int _completedTests;
     private int _totalTests;
     private bool _isLoading;
+
+    // Wrapper class to hold TestAttempt with attempt number
+    public class TestAttemptInfo
+    {
+        public TestAttempt Attempt { get; set; } = null!;
+        public int AttemptNumber { get; set; }
+        public string AttemptLabel => $"Lần {AttemptNumber}";
+    }
 
     public User? CurrentStudent
     {
@@ -35,7 +43,7 @@ public class StudentDetailViewModel : ViewModelBase
         set => SetProperty(ref _currentClass, value);
     }
 
-    public ObservableCollection<TestAttempt> TestAttempts
+    public ObservableCollection<TestAttemptInfo> TestAttempts
     {
         get => _testAttempts;
         set => SetProperty(ref _testAttempts, value);
@@ -107,8 +115,23 @@ public class StudentDetailViewModel : ViewModelBase
                 CurrentStudent.UserId,
                 CurrentClass.ClassId);
 
-            TestAttempts = new ObservableCollection<TestAttempt>(
-                attempts.OrderByDescending(a => a.StartTime));
+            // Group by TestId and calculate attempt number for each test
+            var attemptInfos = attempts
+                .OrderBy(a => a.StartTime) // Sort by time first
+                .GroupBy(a => a.TestId)
+                .SelectMany(group =>
+                {
+                    int attemptNumber = 1;
+                    return group.Select(attempt => new TestAttemptInfo
+                    {
+                        Attempt = attempt,
+                        AttemptNumber = attemptNumber++
+                    });
+                })
+                .OrderByDescending(info => info.Attempt.StartTime) // Then sort by most recent
+                .ToList();
+
+            TestAttempts = new ObservableCollection<TestAttemptInfo>(attemptInfos);
 
             // Calculate statistics
             var completedAttempts = attempts
