@@ -1,9 +1,12 @@
+using System;
 using System.Windows;
 using System.Windows.Input;
 using TestManagementASM.Commands;
 using TestManagementASM.Services.Interfaces;
 using TestManagementASM.Stores;
 using TestManagementASM.ViewModels.Base;
+using TestManagementASM.ViewModels.Student;
+using TestManagementASM.ViewModels.Teacher;
 
 namespace TestManagementASM.ViewModels;
 
@@ -29,8 +32,18 @@ public class MainViewModel : ViewModelBase
         set => SetProperty(ref _currentUserRole, value);
     }
 
+    // Role-based visibility
+    public int? CurrentUserRoleId => _authStore.CurrentUser?.RoleId;
+    public bool IsAdmin => _authStore.CurrentUser?.RoleId == 1;
+    public bool IsTeacher => _authStore.CurrentUser?.RoleId == 2;
+    public bool IsStudent => _authStore.CurrentUser?.RoleId == 3;
+
     public ICommand NavigateToSubjectsCommand { get; }
     public ICommand NavigateToUsersCommand { get; }
+    public ICommand NavigateToStudentTestsCommand { get; }
+    public ICommand NavigateToTeacherClassesCommand { get; }
+    public ICommand NavigateToTeacherTestsCommand { get; }
+    public ICommand NavigateToQuestionsCommand { get; }
     public ICommand LogoutCommand { get; }
 
     public MainViewModel(
@@ -47,12 +60,35 @@ public class MainViewModel : ViewModelBase
 
         NavigateToSubjectsCommand = new NavigateCommand<SubjectListViewModel>(navigationService);
         NavigateToUsersCommand = new NavigateCommand<UserListViewModel>(navigationService);
+        NavigateToStudentTestsCommand = new NavigateCommand<StudentTestListViewModel>(navigationService);
+        NavigateToTeacherClassesCommand = new NavigateCommand<TeacherClassListViewModel>(navigationService);
+        NavigateToTeacherTestsCommand = new NavigateCommand<TeacherTestListViewModel>(navigationService);
+        NavigateToQuestionsCommand = new NavigateCommand<QuestionListViewModel>(navigationService);
         LogoutCommand = new RelayCommand(() => Logout(authService));
 
         UpdateCurrentUserInfo();
 
-        // Navigate to Users by default
-        _navigationService.NavigateTo<UserListViewModel>();
+        // Navigate based on role
+        try
+        {
+            if (IsStudent)
+            {
+                _navigationService.NavigateTo<StudentTestListViewModel>();
+            }
+            else if (IsTeacher)
+            {
+                _navigationService.NavigateTo<TeacherClassListViewModel>();
+            }
+            else
+            {
+                _navigationService.NavigateTo<UserListViewModel>();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Lỗi khi navigate: {ex.Message}\n\nStackTrace: {ex.StackTrace}\n\nInnerException: {ex.InnerException?.Message}",
+                "Lỗi Navigation", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     private void OnCurrentViewModelChanged()
@@ -68,6 +104,12 @@ public class MainViewModel : ViewModelBase
             CurrentUserName = currentUser.FullName ?? currentUser.Username;
             CurrentUserRole = currentUser.Role?.RoleName ?? "Unknown";
         }
+
+        // Notify role-based properties
+        OnPropertyChanged(nameof(CurrentUserRoleId));
+        OnPropertyChanged(nameof(IsAdmin));
+        OnPropertyChanged(nameof(IsTeacher));
+        OnPropertyChanged(nameof(IsStudent));
     }
 
     private void Logout(IAuthenticationService authService)

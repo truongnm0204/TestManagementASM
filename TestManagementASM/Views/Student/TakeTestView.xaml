@@ -1,0 +1,250 @@
+<UserControl x:Class="TestManagementASM.Views.Student.TakeTestView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+        d:DesignWidth="900">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Bar: Test Name, Timer, Question Counter -->
+        <Border Grid.Row="0"
+                Background="#1976D2"
+                Padding="20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Test Name -->
+                <TextBlock Grid.Column="0"
+                           Text="{Binding CurrentTest.TestName}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+
+                <!-- Timer -->
+                <Border Grid.Column="1"
+                        Background="#F44336"
+                        CornerRadius="5"
+                        Padding="15,8"
+                        Margin="0,0,20,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⏱️ "
+                                FontSize="16"
+                                Foreground="White"/>
+                        <TextBlock Text="{Binding RemainingTimeText}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Question Counter -->
+                <Border Grid.Column="2"
+                        Background="#1565C0"
+                        CornerRadius="5"
+                        Padding="15,8">
+                    <TextBlock FontSize="14"
+                            Foreground="White"
+                            FontWeight="SemiBold">
+                        <Run Text="Câu "/>
+                        <Run Text="{Binding QuestionNumber}"/>
+                        <Run Text="/"/>
+                        <Run Text="{Binding Questions.Count}"/>
+                    </TextBlock>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Main Area: Question and Answers -->
+        <ScrollViewer Grid.Row="1"
+                VerticalScrollBarVisibility="Auto">
+            <Border Margin="30"
+                    Padding="25"
+                    Background="White"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    CornerRadius="5">
+                <StackPanel>
+                    <!-- Question Text -->
+                    <TextBlock Text="{Binding CurrentQuestion.QuestionText}"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap"
+                               Margin="0,0,0,20"
+                               Foreground="#333333"/>
+
+                    <!-- Question Type Indicator -->
+                    <TextBlock FontSize="12"
+                               Foreground="#666666"
+                               FontStyle="Italic"
+                               Margin="0,0,0,15">
+                        <Run Text="("/>
+                        <Run Text="{Binding CurrentQuestion.QuestionType}"/>
+                        <Run Text=" - "/>
+                        <Run Text="Chọn "/>
+                        <Run Text="một"/>
+                        <Run Text=" đáp án)"/>
+                    </TextBlock>
+
+                    <!-- Answers List -->
+                    <ItemsControl ItemsSource="{Binding CurrentQuestion.Answers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="#F9F9F9"
+                                        BorderBrush="#E0E0E0"
+                                        BorderThickness="1"
+                                        CornerRadius="5"
+                                        Padding="15"
+                                        Margin="0,0,0,10">
+                                    <RadioButton Content="{Binding AnswerText}"
+                                                 GroupName="Answers"
+                                                 FontSize="14"
+                                                 Command="{Binding DataContext.SelectAnswerCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                 CommandParameter="{Binding AnswerId}">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Setter Property="Foreground"
+                                                        Value="#333333"/>
+                                                <Setter Property="Cursor"
+                                                        Value="Hand"/>
+                                            </Style>
+                                        </RadioButton.Style>
+                                    </RadioButton>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+
+        <!-- Bottom Bar: Navigation Buttons -->
+        <Border Grid.Row="2"
+                Background="#F5F5F5"
+                Padding="20"
+                BorderBrush="#E0E0E0"
+                BorderThickness="0,1,0,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Previous Button -->
+                <Button Grid.Column="0"
+                        Command="{Binding PreviousQuestionCommand}"
+                        Content="← Câu trước"
+                        Width="120"
+                        Height="40"
+                        Background="White"
+                        Foreground="#1976D2"
+                        BorderBrush="#1976D2"
+                        BorderThickness="2"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="5"
+                                                Padding="10">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Next Button -->
+                <Button Grid.Column="2"
+                        Command="{Binding NextQuestionCommand}"
+                        Content="Câu sau →"
+                        Width="120"
+                        Height="40"
+                        Margin="0,0,15,0"
+                        Background="White"
+                        Foreground="#1976D2"
+                        BorderBrush="#1976D2"
+                        BorderThickness="2"
+                        FontWeight="SemiBold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="5"
+                                                Padding="10">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Button.Style>
+                </Button>
+
+                <!-- Submit Button -->
+                <Button Grid.Column="3"
+                        Command="{Binding SubmitTestCommand}"
+                        Content="✓ NỘP BÀI"
+                        Width="120"
+                        Height="40"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        BorderThickness="0"
+                        FontWeight="Bold"
+                        Cursor="Hand">
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="5"
+                                                Padding="10">
+                                            <ContentPresenter HorizontalAlignment="Center"
+                                                    VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver"
+                                        Value="True">
+                                    <Setter Property="Background"
+                                            Value="#45A049"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+

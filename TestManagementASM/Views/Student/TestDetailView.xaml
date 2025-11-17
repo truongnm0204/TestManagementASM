@@ -1,0 +1,269 @@
+<UserControl x:Class="TestManagementASM.Views.Student.TestDetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600"
+        d:DesignWidth="900">
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0"
+                Background="#1976D2"
+                Padding="20">
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding BackCommand}"
+                        Width="35"
+                        Height="35"
+                        Background="#1565C0"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        Margin="0,0,15,0">
+                    <TextBlock Text="←"
+                            FontSize="20"
+                            Foreground="White"
+                            FontWeight="Bold"/>
+                </Button>
+                <TextBlock Text="CHI TIẾT BÀI THI"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1"
+                VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30">
+                <!-- Test Information Card -->
+                <Border Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        Padding="25"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="{Binding CurrentTest.TestName}"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#1976D2"
+                                   Margin="0,0,0,20"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Left Column -->
+                            <TextBlock Grid.Row="0"
+                                    Grid.Column="0"
+                                    Text="📚 Môn học:"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="0"
+                                    Grid.Column="1"
+                                    Text="{Binding CurrentTest.Class.Subject.SubjectName}"
+                                    Margin="0,0,0,10"/>
+
+                            <TextBlock Grid.Row="1"
+                                    Grid.Column="0"
+                                    Text="🏫 Lớp:"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding CurrentTest.Class.ClassName}"
+                                    Margin="0,0,0,10"/>
+
+                            <TextBlock Grid.Row="2"
+                                    Grid.Column="0"
+                                    Text="⏱️ Thời gian:"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,0,0,10">
+                                <Run Text="{Binding CurrentTest.DurationMinutes}"/>
+                                <Run Text=" phút"/>
+                            </TextBlock>
+
+                            <TextBlock Grid.Row="3"
+                                    Grid.Column="0"
+                                    Text="❓ Số câu hỏi:"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="3"
+                                    Grid.Column="1"
+                                    Text="{Binding QuestionCount}"
+                                    Margin="0,0,0,10"/>
+
+                            <TextBlock Grid.Row="4"
+                                    Grid.Column="0"
+                                    Text="📅 Thời gian mở:"
+                                    FontWeight="SemiBold"
+                                    Margin="0,0,0,10"/>
+                            <TextBlock Grid.Row="4"
+                                    Grid.Column="1"
+                                    Margin="0,0,0,10">
+                                <Run Text="{Binding CurrentTest.AvailableFrom, StringFormat='dd/MM/yyyy HH:mm'}"/>
+                                <Run Text=" - "/>
+                                <Run Text="{Binding CurrentTest.AvailableTo, StringFormat='dd/MM/yyyy HH:mm'}"/>
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- Start Test Button -->
+                        <Button Command="{Binding StartTestCommand}"
+                                Content="BẮT ĐẦU LÀM BÀI"
+                                Width="200"
+                                Height="45"
+                                Margin="0,20,0,0"
+                                Background="#4CAF50"
+                                Foreground="White"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                HorizontalAlignment="Center">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="5"
+                                                        Padding="20,10">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="IsEnabled"
+                                            Value="{Binding CanStartTest}"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver"
+                                                Value="True">
+                                            <Setter Property="Background"
+                                                    Value="#45A049"/>
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled"
+                                                Value="False">
+                                            <Setter Property="Background"
+                                                    Value="#CCCCCC"/>
+                                            <Setter Property="Cursor"
+                                                    Value="No"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+                        <TextBlock Text="Bài thi hiện không khả dụng"
+                                   Foreground="#F44336"
+                                   FontWeight="SemiBold"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,10,0,0"
+                                   Visibility="{Binding CanStartTest, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Previous Attempts -->
+                <Border Background="White"
+                        BorderBrush="#E0E0E0"
+                        BorderThickness="1"
+                        CornerRadius="5"
+                        Padding="25">
+                    <StackPanel>
+                        <TextBlock Text="Lịch sử làm bài"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#333333"
+                                   Margin="0,0,0,15"/>
+
+                        <DataGrid ItemsSource="{Binding PreviousAttempts}"
+                                  AutoGenerateColumns="False"
+                                  IsReadOnly="True"
+                                  CanUserAddRows="False"
+                                  CanUserDeleteRows="False"
+                                  GridLinesVisibility="Horizontal"
+                                  HeadersVisibility="Column"
+                                  RowHeight="40"
+                                  FontSize="13"
+                                  Background="White"
+                                  BorderThickness="0">
+
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background"
+                                            Value="#F5F5F5"/>
+                                    <Setter Property="Foreground"
+                                            Value="#333333"/>
+                                    <Setter Property="FontWeight"
+                                            Value="SemiBold"/>
+                                    <Setter Property="Padding"
+                                            Value="10"/>
+                                    <Setter Property="Height"
+                                            Value="35"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Lần thử"
+                                        Binding="{Binding AttemptId}"
+                                        Width="Auto"/>
+                                <DataGridTextColumn Header="Thời gian bắt đầu"
+                                        Binding="{Binding StartTime, StringFormat='dd/MM/yyyy HH:mm'}"
+                                        Width="*"/>
+                                <DataGridTextColumn Header="Thời gian kết thúc"
+                                        Binding="{Binding EndTime, StringFormat='dd/MM/yyyy HH:mm'}"
+                                        Width="*"/>
+                                <DataGridTextColumn Header="Điểm"
+                                        Binding="{Binding Score}"
+                                        Width="Auto"/>
+                                <DataGridTextColumn Header="Trạng thái"
+                                        Binding="{Binding AttemptStatus}"
+                                        Width="Auto"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+
+                        <TextBlock Text="Chưa có lần làm bài nào"
+                                   Foreground="#999999"
+                                   FontStyle="Italic"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,20,0,0"
+                                   Visibility="{Binding PreviousAttempts.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Loading Overlay -->
+        <Border Grid.Row="0"
+                Grid.RowSpan="2"
+                Background="#80000000"
+                Visibility="{Binding IsLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+                <TextBlock Text="Đang tải..."
+                        FontSize="16"
+                        Foreground="White"
+                        FontWeight="Bold"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>
+
