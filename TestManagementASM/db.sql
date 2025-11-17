@@ -1,11 +1,11 @@
 USE [master]
 GO
-/****** Object:  Database [TestManagementDB]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Database [TestManagementDB]    Script Date: 11/17/2025 12:59:27 AM ******/
 CREATE DATABASE [TestManagementDB]
-
+ 
 USE [TestManagementDB]
 GO
-/****** Object:  Table [dbo].[Answers]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Answers]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -22,7 +22,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Classes]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Classes]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -38,7 +38,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Enrollments]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Enrollments]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -53,7 +53,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Questions]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Questions]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -72,7 +72,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Roles]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Roles]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -86,7 +86,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[StudentAnswers]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[StudentAnswers]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -102,7 +102,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Subjects]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Subjects]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -119,7 +119,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TeachingAssignments]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[TeachingAssignments]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -134,7 +134,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestAttempts]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[TestAttempts]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -153,7 +153,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[TestQuestions]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[TestQuestions]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -169,7 +169,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Tests]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Tests]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -190,7 +190,7 @@ PRIMARY KEY CLUSTERED
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 ) ON [PRIMARY]
 GO
-/****** Object:  Table [dbo].[Users]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Table [dbo].[Users]    Script Date: 11/17/2025 12:59:27 AM ******/
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
@@ -222,11 +222,11 @@ SET IDENTITY_INSERT [dbo].[Roles] OFF
 GO
 SET IDENTITY_INSERT [dbo].[Users] ON 
 GO
-INSERT [dbo].[Users] ([UserID], [Username], [PasswordHash], [FullName], [Email], [RoleID], [Status], [CreatedAt]) VALUES (1, N'admin', N'HASH_CUA_PASSWORD_ADMIN123', N'Quản Trị Viên', NULL, 1, 1, CAST(N'2025-10-23T08:58:17.1833333' AS DateTime2))
+INSERT [dbo].[Users] ([UserID], [Username], [PasswordHash], [FullName], [Email], [RoleID], [Status], [CreatedAt]) VALUES (1, N'admin', N'jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=', N'Quản Trị Viên', NULL, 1, 1, CAST(N'2025-10-23T08:58:17.1833333' AS DateTime2))
 GO
 SET IDENTITY_INSERT [dbo].[Users] OFF
 GO
-/****** Object:  Index [UK_Student_Class]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UK_Student_Class]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[Enrollments] ADD  CONSTRAINT [UK_Student_Class] UNIQUE NONCLUSTERED 
 (
 	[StudentID] ASC,
@@ -235,7 +235,7 @@ ALTER TABLE [dbo].[Enrollments] ADD  CONSTRAINT [UK_Student_Class] UNIQUE NONCLU
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Roles__8A2B616028740FD8]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UQ__Roles__8A2B616028740FD8]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED 
 (
 	[RoleName] ASC
@@ -243,20 +243,20 @@ ALTER TABLE [dbo].[Roles] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Subjects__9F7CE1A922430F2E]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UQ__Subjects__9F7CE1A922430F2E]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[Subjects] ADD UNIQUE NONCLUSTERED 
 (
 	[SubjectCode] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [UK_Teacher_Class]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UK_Teacher_Class]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[TeachingAssignments] ADD  CONSTRAINT [UK_Teacher_Class] UNIQUE NONCLUSTERED 
 (
 	[TeacherID] ASC,
 	[ClassID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
 GO
-/****** Object:  Index [UK_Test_Question]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UK_Test_Question]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[TestQuestions] ADD  CONSTRAINT [UK_Test_Question] UNIQUE NONCLUSTERED 
 (
 	[TestID] ASC,
@@ -265,7 +265,7 @@ ALTER TABLE [dbo].[TestQuestions] ADD  CONSTRAINT [UK_Test_Question] UNIQUE NONC
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__536C85E4826B54A9]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UQ__Users__536C85E4826B54A9]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Username] ASC
@@ -273,7 +273,7 @@ ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED
 GO
 SET ANSI_PADDING ON
 GO
-/****** Object:  Index [UQ__Users__A9D10534C8F2A360]    Script Date: 10/25/2025 6:54:58 AM ******/
+/****** Object:  Index [UQ__Users__A9D10534C8F2A360]    Script Date: 11/17/2025 12:59:27 AM ******/
 ALTER TABLE [dbo].[Users] ADD UNIQUE NONCLUSTERED 
 (
 	[Email] ASC
@@ -421,3 +421,97 @@ USE [master]
 GO
 ALTER DATABASE [TestManagementDB] SET  READ_WRITE 
 GO
+-- TEACHERS
+INSERT INTO Users (Username, PasswordHash, FullName, Email, RoleID, Status)
+VALUES 
+('teacher1', 'HASH_TEACHER1', N'Nguyễn Văn A', 'a.teacher@example.com', 2, 1),
+('teacher2', 'HASH_TEACHER2', N'Trần Thị B', 'b.teacher@example.com', 2, 1);
+
+-- STUDENTS
+INSERT INTO Users (Username, PasswordHash, FullName, Email, RoleID, Status)
+VALUES
+('student1', 'HASH_STUDENT1', N'Lê Minh C', 'c.student@example.com', 3, 1),
+('student2', 'HASH_STUDENT2', N'Phạm Thị D', 'd.student@example.com', 3, 1),
+('student3', 'HASH_STUDENT3', N'Hoàng Văn E', 'e.student@example.com', 3, 1);
+INSERT INTO Subjects (SubjectCode, SubjectName, CreatedBy_UserID, Status)
+VALUES
+('PR101', N'Lập Trình Cơ Bản', 1, 1),
+('DB201', N'Cơ Sở Dữ Liệu', 1, 1);
+INSERT INTO Classes (SubjectID, ClassName, Semester)
+VALUES
+(1, N'PR101 - Nhóm 1', 'Fall 2025'),
+(2, N'DB201 - Nhóm 1', 'Fall 2025');
+INSERT INTO TeachingAssignments (TeacherID, ClassID)
+VALUES
+(2, 1),
+(3, 2);
+INSERT INTO Enrollments (StudentID, ClassID)
+VALUES
+(4, 1), -- student1 vào PR101
+(5, 1), -- student2 vào PR101
+(6, 2); -- student3 vào DB201
+-- PR101 QUESTIONS (Created by teacher1)
+INSERT INTO Questions (SubjectID, CreatedBy_TeacherID, QuestionText, QuestionType, DifficultyLevel, Chapter)
+VALUES
+(1, 2, N'Câu lệnh để in ra màn hình trong C là gì?', 'SINGLE', 1, 1),
+(1, 2, N'Kiểu dữ liệu nào để lưu số nguyên?', 'SINGLE', 1, 1);
+
+-- DB201 QUESTIONS (Created by teacher2)
+INSERT INTO Questions (SubjectID, CreatedBy_TeacherID, QuestionText, QuestionType, DifficultyLevel, Chapter)
+VALUES
+(2, 3, N'Câu lệnh nào dùng để lấy dữ liệu trong SQL?', 'SINGLE', 1, 1),
+(2, 3, N'Ràng buộc khóa chính được dùng để làm gì?', 'SINGLE', 2, 2);
+-- Q1
+INSERT INTO Answers (QuestionID, AnswerText, IsCorrect) VALUES
+(1, N'printf()', 1),
+(1, N'cin>>', 0),
+(1, N'scan()', 0);
+
+-- Q2
+INSERT INTO Answers (QuestionID, AnswerText, IsCorrect) VALUES
+(2, N'int', 1),
+(2, N'string', 0),
+(2, N'bool', 0);
+
+-- Q3
+INSERT INTO Answers (QuestionID, AnswerText, IsCorrect) VALUES
+(3, N'SELECT', 1),
+(3, N'INSERT', 0),
+(3, N'UPDATE', 0);
+
+-- Q4
+INSERT INTO Answers (QuestionID, AnswerText, IsCorrect) VALUES
+(4, N'Xác định duy nhất mỗi bản ghi', 1),
+(4, N'Lưu trữ giá trị NULL', 0),
+(4, N'Giúp cập nhật dữ liệu nhanh hơn', 0);
+INSERT INTO Tests (ClassID, CreatedBy_TeacherID, TestName, DurationMinutes, IsActive)
+VALUES
+(1, 2, N'Kiểm tra giữa kỳ PR101', 45, 1),
+(2, 3, N'Kiểm tra cuối kỳ DB201', 60, 1);
+-- Test 1 (PR101)
+INSERT INTO TestQuestions (TestID, QuestionID, Points)
+VALUES
+(1, 1, 1),
+(1, 2, 1);
+
+-- Test 2 (DB201)
+INSERT INTO TestQuestions (TestID, QuestionID, Points)
+VALUES
+(2, 3, 1),
+(2, 4, 1);
+INSERT INTO TestAttempts (StudentID, TestID, StartTime, EndTime, Score, AttemptStatus)
+VALUES
+(4, 1, GETDATE(), GETDATE(), 2, 'Completed'),
+(5, 1, GETDATE(), GETDATE(), 1, 'Completed'),
+(6, 2, GETDATE(), NULL, NULL, 'InProgress');
+-- Student 1 - Test 1
+INSERT INTO StudentAnswers (AttemptID, QuestionID, ChosenAnswerID)
+VALUES
+(1, 1, 1),
+(1, 2, 4);
+
+-- Student 2 - Test 1
+INSERT INTO StudentAnswers (AttemptID, QuestionID, ChosenAnswerID)
+VALUES
+(2, 1, 2),
+(2, 2, 4);

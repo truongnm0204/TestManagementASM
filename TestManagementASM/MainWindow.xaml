@@ -5,7 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TestManagementASM"
         xmlns:viewmodels="clr-namespace:TestManagementASM.ViewModels"
+        xmlns:studentvm="clr-namespace:TestManagementASM.ViewModels.Student"
+        xmlns:teachervm="clr-namespace:TestManagementASM.ViewModels.Teacher"
         xmlns:views="clr-namespace:TestManagementASM.Views"
+        xmlns:studentviews="clr-namespace:TestManagementASM.Views.Student"
+        xmlns:teacherviews="clr-namespace:TestManagementASM.Views.Teacher"
         mc:Ignorable="d"
         Title="Hệ thống Quản lý Bài kiểm tra"
         Height="700"
@@ -21,6 +25,40 @@
         <DataTemplate DataType="{x:Type viewmodels:UserListViewModel}">
             <views:UserListView/>
         </DataTemplate>
+
+        <!-- Student ViewModels -->
+        <DataTemplate DataType="{x:Type studentvm:StudentTestListViewModel}">
+            <studentviews:StudentTestListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type studentvm:TestDetailViewModel}">
+            <studentviews:TestDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type studentvm:TakeTestViewModel}">
+            <studentviews:TakeTestView/>
+        </DataTemplate>
+
+        <!-- Teacher ViewModels -->
+        <DataTemplate DataType="{x:Type teachervm:TeacherClassListViewModel}">
+            <teacherviews:TeacherClassListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:ClassDetailViewModel}">
+            <teacherviews:ClassDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:StudentDetailViewModel}">
+            <teacherviews:StudentDetailView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:TeacherTestListViewModel}">
+            <teacherviews:TeacherTestListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:QuestionListViewModel}">
+            <teacherviews:QuestionListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:QuestionFormViewModel}">
+            <teacherviews:QuestionFormView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type teachervm:TestFormViewModel}">
+            <teacherviews:TestFormView/>
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
@@ -30,7 +68,10 @@
         </Grid.ColumnDefinitions>
 
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="#1E88E5" BorderBrush="#1565C0" BorderThickness="0,0,1,0">
+        <Border Grid.Column="0"
+                Background="#1E88E5"
+                BorderBrush="#1565C0"
+                BorderThickness="0,0,1,0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -39,111 +80,193 @@
                 </Grid.RowDefinitions>
 
                 <!-- Logo/Header -->
-                <Border Grid.Row="0" Background="#1565C0" Padding="20">
+                <Border Grid.Row="0"
+                        Background="#1565C0"
+                        Padding="20">
                     <StackPanel>
                         <TextBlock Text="TEST MANAGER"
-                                  FontSize="18"
-                                  FontWeight="Bold"
-                                  Foreground="White"
-                                  HorizontalAlignment="Center"/>
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   HorizontalAlignment="Center"/>
                         <TextBlock Text="Quản lý bài kiểm tra"
-                                  FontSize="11"
-                                  Foreground="#B3E5FC"
-                                  HorizontalAlignment="Center"
-                                  Margin="0,5,0,0"/>
+                                   FontSize="11"
+                                   Foreground="#B3E5FC"
+                                   HorizontalAlignment="Center"
+                                   Margin="0,5,0,0"/>
                     </StackPanel>
                 </Border>
 
                 <!-- Navigation Menu -->
-                <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                <StackPanel Grid.Row="1"
+                            Margin="0,20,0,0">
+
+                    <!-- Admin Menus -->
                     <Button Command="{Binding NavigateToSubjectsCommand}"
-                           Style="{StaticResource SidebarButtonStyle}">
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=1}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="📚" FontSize="18" Margin="0,0,10,0"/>
-                            <TextBlock Text="Quản lý môn học" FontSize="14"/>
+                            <TextBlock Text="📚"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Quản lý môn học"
+                                       FontSize="14"/>
                         </StackPanel>
                     </Button>
 
                     <Button Command="{Binding NavigateToUsersCommand}"
-                           Style="{StaticResource SidebarButtonStyle}">
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=1}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="👥" FontSize="18" Margin="0,0,10,0"/>
-                            <TextBlock Text="Quản lý người dùng" FontSize="14"/>
+                            <TextBlock Text="👥"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Quản lý người dùng"
+                                       FontSize="14"/>
                         </StackPanel>
                     </Button>
 
-                    <Separator Margin="15,20" Background="#42A5F5"/>
+                    <!-- Teacher Menus -->
+                    <Button Command="{Binding NavigateToTeacherClassesCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏫"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Lớp học của tôi"
+                                       FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Command="{Binding NavigateToTeacherTestsCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📝"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Quản lý bài thi"
+                                       FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Command="{Binding NavigateToQuestionsCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=2}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="❓"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Ngân hàng câu hỏi"
+                                       FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Student Menus -->
+                    <Button Command="{Binding NavigateToStudentTestsCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=3}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="📝"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Bài thi của tôi"
+                                       FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Separator Margin="15,20"
+                               Background="#42A5F5"
+                               Visibility="{Binding IsStudent, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
 
                     <TextBlock Text="CÁC CHỨC NĂNG KHÁC"
-                              Foreground="#B3E5FC"
-                              FontSize="11"
-                              FontWeight="SemiBold"
-                              Margin="20,0,0,10"/>
+                               Foreground="#B3E5FC"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Margin="20,0,0,10"/>
 
                     <Button IsEnabled="False"
-                           Style="{StaticResource SidebarButtonStyle}">
+                            Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="📝" FontSize="18" Margin="0,0,10,0"/>
-                            <TextBlock Text="Quản lý bài kiểm tra" FontSize="14"/>
+                            <TextBlock Text="📝"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Quản lý bài kiểm tra"
+                                       FontSize="14"/>
                         </StackPanel>
                     </Button>
 
                     <Button IsEnabled="False"
-                           Style="{StaticResource SidebarButtonStyle}">
+                            Style="{StaticResource SidebarButtonStyle}">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="❓" FontSize="18" Margin="0,0,10,0"/>
-                            <TextBlock Text="Ngân hàng câu hỏi" FontSize="14"/>
+                            <TextBlock Text="❓"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Ngân hàng câu hỏi"
+                                       FontSize="14"/>
                         </StackPanel>
                     </Button>
                 </StackPanel>
 
                 <!-- User Info & Logout -->
-                <Border Grid.Row="2" Background="#1565C0" Padding="15">
+                <Border Grid.Row="2"
+                        Background="#1565C0"
+                        Padding="15">
                     <StackPanel>
-                        <Border Background="#1E88E5" CornerRadius="5" Padding="10" Margin="0,0,0,10">
+                        <Border Background="#1E88E5"
+                                CornerRadius="5"
+                                Padding="10"
+                                Margin="0,0,0,10">
                             <StackPanel>
                                 <TextBlock Text="{Binding CurrentUserName}"
-                                          Foreground="White"
-                                          FontWeight="SemiBold"
-                                          FontSize="13"
-                                          TextTrimming="CharacterEllipsis"/>
+                                           Foreground="White"
+                                           FontWeight="SemiBold"
+                                           FontSize="13"
+                                           TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{Binding CurrentUserRole}"
-                                          Foreground="#B3E5FC"
-                                          FontSize="11"
-                                          Margin="0,3,0,0"/>
+                                           Foreground="#B3E5FC"
+                                           FontSize="11"
+                                           Margin="0,3,0,0"/>
                             </StackPanel>
                         </Border>
 
                         <Button Command="{Binding LogoutCommand}"
-                               Background="#E53935"
-                               Foreground="White"
-                               BorderThickness="0"
-                               Height="35"
-                               FontWeight="SemiBold"
-                               Cursor="Hand">
+                                Background="#E53935"
+                                Foreground="White"
+                                BorderThickness="0"
+                                Height="35"
+                                FontWeight="SemiBold"
+                                Cursor="Hand">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="Button">
                                                 <Border Background="{TemplateBinding Background}"
-                                                       CornerRadius="4">
+                                                        CornerRadius="4">
                                                     <ContentPresenter HorizontalAlignment="Center"
-                                                                    VerticalAlignment="Center"/>
+                                                                      VerticalAlignment="Center"/>
                                                 </Border>
                                             </ControlTemplate>
                                         </Setter.Value>
                                     </Setter>
                                     <Style.Triggers>
-                                        <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Background" Value="#C62828"/>
+                                        <Trigger Property="IsMouseOver"
+                                                 Value="True">
+                                            <Setter Property="Background"
+                                                    Value="#C62828"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="🚪" FontSize="14" Margin="0,0,8,0"/>
-                                <TextBlock Text="Đăng xuất" FontSize="13"/>
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="🚪"
+                                           FontSize="14"
+                                           Margin="0,0,8,0"/>
+                                <TextBlock Text="Đăng xuất"
+                                           FontSize="13"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>
@@ -152,7 +275,8 @@
         </Border>
 
         <!-- Main Content Area -->
-        <Border Grid.Column="1" Background="#FAFAFA">
+        <Border Grid.Column="1"
+                Background="#FAFAFA">
             <ContentControl Content="{Binding CurrentViewModel}"/>
         </Border>
     </Grid>

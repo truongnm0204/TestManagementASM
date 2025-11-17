@@ -5,6 +5,8 @@ using TestManagementASM.Services.Interfaces;
 using TestManagementASM.Stores;
 using TestManagementASM.ViewModels;
 using TestManagementASM.ViewModels.Base;
+using TestManagementASM.ViewModels.Student;
+using TestManagementASM.ViewModels.Teacher;
 using TestManagementASM.Views;
 
 namespace TestManagementASM;
@@ -13,12 +15,20 @@ public partial class App : Application
 {
     private readonly NavigationStore _navigationStore;
     private readonly AuthStore _authStore;
+    private readonly SelectedTestStore _selectedTestStore;
+    private readonly SelectedQuestionStore _selectedQuestionStore;
+    private readonly SelectedClassStore _selectedClassStore;
+    private readonly SelectedStudentStore _selectedStudentStore;
     private readonly TestManagementDbContext _dbContext;
 
     public App()
     {
         _navigationStore = new NavigationStore();
         _authStore = new AuthStore();
+        _selectedTestStore = new SelectedTestStore();
+        _selectedQuestionStore = new SelectedQuestionStore();
+        _selectedClassStore = new SelectedClassStore();
+        _selectedStudentStore = new SelectedStudentStore();
         _dbContext = new TestManagementDbContext();
     }
 
@@ -30,6 +40,11 @@ public partial class App : Application
         IAuthenticationService authService = new AuthenticationService(_dbContext, _authStore);
         ISubjectService subjectService = new SubjectService(_dbContext, _authStore);
         IUserService userService = new UserService(_dbContext);
+        ITestService testService = new TestService(_dbContext);
+        IQuestionService questionService = new QuestionService(_dbContext);
+        ITestAttemptService testAttemptService = new TestAttemptService(_dbContext);
+        IClassService classService = new ClassService(_dbContext);
+        IEnrollmentService enrollmentService = new EnrollmentService(_dbContext);
 
         // Create navigation service with ViewModel factory
         INavigationService navigationService = new NavigationService(
@@ -94,6 +109,11 @@ public partial class App : Application
         IAuthenticationService authService = new AuthenticationService(dbContext, _authStore);
         ISubjectService subjectService = new SubjectService(dbContext, _authStore);
         IUserService userService = new UserService(dbContext);
+        ITestService testService = new TestService(dbContext);
+        IQuestionService questionService = new QuestionService(dbContext);
+        ITestAttemptService testAttemptService = new TestAttemptService(dbContext);
+        IClassService classService = new ClassService(dbContext);
+        IEnrollmentService enrollmentService = new EnrollmentService(dbContext);
         INavigationService navigationService = new NavigationService(_navigationStore, CreateViewModel);
 
         // Factory method to create ViewModels
@@ -109,8 +129,52 @@ public partial class App : Application
         {
             return new MainViewModel(_navigationStore, _authStore, navigationService, authService);
         }
-
-        throw new ArgumentException($"Unknown ViewModel type: {viewModelType.Name}");
+        // Student ViewModels
+        else if (viewModelType == typeof(StudentTestListViewModel))
+        {
+            return new StudentTestListViewModel(testService, _authStore, _selectedTestStore, navigationService);
+        }
+        else if (viewModelType == typeof(TestDetailViewModel))
+        {
+            return new TestDetailViewModel(testService, testAttemptService, _authStore, _selectedTestStore, navigationService);
+        }
+        else if (viewModelType == typeof(TakeTestViewModel))
+        {
+            return new TakeTestViewModel(testService, testAttemptService, _authStore, _selectedTestStore, navigationService);
+        }
+        // Teacher ViewModels
+        else if (viewModelType == typeof(TeacherClassListViewModel))
+        {
+            return new TeacherClassListViewModel(classService, _authStore, _selectedClassStore, navigationService);
+        }
+        else if (viewModelType == typeof(ClassDetailViewModel))
+        {
+            return new ClassDetailViewModel(classService, testAttemptService, _selectedClassStore, _selectedStudentStore, navigationService);
+        }
+        else if (viewModelType == typeof(StudentDetailViewModel))
+        {
+            return new StudentDetailViewModel(testAttemptService, _selectedStudentStore, navigationService);
+        }
+        else if (viewModelType == typeof(TeacherTestListViewModel))
+        {
+            return new TeacherTestListViewModel(testService, _authStore, _selectedTestStore, navigationService);
+        }
+        else if (viewModelType == typeof(TestFormViewModel))
+        {
+            return new TestFormViewModel(testService, classService, questionService, subjectService, _authStore, _selectedTestStore, navigationService);
+        }
+        else if (viewModelType == typeof(QuestionListViewModel))
+        {
+            return new QuestionListViewModel(questionService, subjectService, _authStore, _selectedQuestionStore, navigationService);
+        }
+        else if (viewModelType == typeof(QuestionFormViewModel))
+        {
+            return new QuestionFormViewModel(questionService, subjectService, _authStore, _selectedQuestionStore, navigationService);
+        }
+        else
+        {
+            throw new ArgumentException($"Unknown ViewModel type: {viewModelType.Name}");
+        }
     }
 
     protected override void OnExit(ExitEventArgs e)
