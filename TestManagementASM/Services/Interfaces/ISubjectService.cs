@@ -9,4 +9,6 @@ public interface ISubjectService
     Task<bool> AddSubjectAsync(Subject subject);
     Task<bool> UpdateSubjectAsync(Subject subject);
     Task<bool> DeleteSubjectAsync(int id);
+    Task<bool> HasClassesAsync(int subjectId);
+    Task<bool> IsSubjectCodeUniqueAsync(string subjectCode, int? excludeSubjectId = null);
 }

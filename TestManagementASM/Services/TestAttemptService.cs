@@ -65,6 +65,41 @@ public class TestAttemptService : ITestAttemptService
         }
     }
 
+    public async Task<bool> SaveStudentAnswersAsync(int attemptId, int questionId, List<int> answerIds)
+    {
+        try
+        {
+            // Remove all existing answers for this question in this attempt
+            var existingAnswers = await _context.StudentAnswers
+                .Where(sa => sa.AttemptId == attemptId && sa.QuestionId == questionId)
+                .ToListAsync();
+
+            if (existingAnswers.Any())
+            {
+                _context.StudentAnswers.RemoveRange(existingAnswers);
+            }
+
+            // Add new answers
+            foreach (var answerId in answerIds)
+            {
+                var studentAnswer = new StudentAnswer
+                {
+                    AttemptId = attemptId,
+                    QuestionId = questionId,
+                    ChosenAnswerId = answerId
+                };
+                _context.StudentAnswers.Add(studentAnswer);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public async Task<bool> CompleteAttemptAsync(int attemptId)
     {
         try
@@ -72,23 +107,54 @@ public class TestAttemptService : ITestAttemptService
             var attempt = await _context.TestAttempts
                 .Include(a => a.StudentAnswers)
                     .ThenInclude(sa => sa.ChosenAnswer)
+                .Include(a => a.StudentAnswers)
+                    .ThenInclude(sa => sa.Question)
+                        .ThenInclude(q => q.Answers)
                 .Include(a => a.Test)
                     .ThenInclude(t => t.TestQuestions)
+                        .ThenInclude(tq => tq.Question)
                 .FirstOrDefaultAsync(a => a.AttemptId == attemptId);
 
             if (attempt == null) return false;
 
             // Calculate score
             int totalPoints = attempt.Test.TestQuestions.Sum(tq => tq.Points);
-            int earnedPoints = 0;
+            double earnedPoints = 0;
 
-            foreach (var studentAnswer in attempt.StudentAnswers)
+            // Group student answers by question
+            var answersByQuestion = attempt.StudentAnswers
+                .GroupBy(sa => sa.QuestionId)
+                .ToList();
+
+            foreach (var questionGroup in answersByQuestion)
             {
-                if (studentAnswer.ChosenAnswer.IsCorrect)
+                var questionId = questionGroup.Key;
+                var testQuestion = attempt.Test.TestQuestions
+                    .FirstOrDefault(tq => tq.QuestionId == questionId);
+
+                if (testQuestion == null) continue;
+
+                var question = testQuestion.Question;
+                var studentAnswerIds = questionGroup.Select(sa => sa.ChosenAnswerId).ToHashSet();
+                var correctAnswerIds = question.Answers
+                    .Where(a => a.IsCorrect)
+                    .Select(a => a.AnswerId)
+                    .ToHashSet();
+
+                // Check question type
+                if (question.QuestionType == "SINGLE")
                 {
-                    var testQuestion = attempt.Test.TestQuestions
-                        .FirstOrDefault(tq => tq.QuestionId == studentAnswer.QuestionId);
-                    if (testQuestion != null)
+                    // Single choice: Award full points if correct answer is selected
+                    if (studentAnswerIds.Count == 1 && correctAnswerIds.Contains(studentAnswerIds.First()))
+                    {
+                        earnedPoints += testQuestion.Points;
+                    }
+                }
+                else if (question.QuestionType == "MULTIPLE")
+                {
+                    // Multiple choice: All-or-nothing scoring
+                    // Student must select ALL correct answers and NO incorrect answers
+                    if (studentAnswerIds.SetEquals(correctAnswerIds))
                     {
                         earnedPoints += testQuestion.Points;
                     }

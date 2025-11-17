@@ -43,6 +43,7 @@ public partial class App : Application
         ITestAttemptService testAttemptService = new TestAttemptService(new TestManagementDbContext());
         IClassService classService = new ClassService(new TestManagementDbContext());
         IEnrollmentService enrollmentService = new EnrollmentService(new TestManagementDbContext());
+        ITeachingAssignmentService teachingAssignmentService = new TeachingAssignmentService(new TestManagementDbContext());
 
         // Create navigation service with ViewModel factory
         INavigationService navigationService = new NavigationService(
@@ -116,6 +117,7 @@ public partial class App : Application
         ITestAttemptService testAttemptService = new TestAttemptService(new TestManagementDbContext());
         IClassService classService = new ClassService(new TestManagementDbContext());
         IEnrollmentService enrollmentService = new EnrollmentService(new TestManagementDbContext());
+        ITeachingAssignmentService teachingAssignmentService = new TeachingAssignmentService(new TestManagementDbContext());
         INavigationService navigationService = new NavigationService(_navigationStore, CreateViewModel);
 
         // Factory method to create ViewModels
@@ -126,6 +128,10 @@ public partial class App : Application
         else if (viewModelType == typeof(UserListViewModel))
         {
             return new UserListViewModel(userService);
+        }
+        else if (viewModelType == typeof(ClassListViewModel))
+        {
+            return new ClassListViewModel(classService, subjectService);
         }
         else if (viewModelType == typeof(MainViewModel))
         {

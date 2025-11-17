@@ -16,7 +16,7 @@ public class TestService : ITestService
     public async Task<List<Test>> GetAvailableTestsForStudentAsync(int studentId)
     {
         var now = DateTime.Now;
-        
+
         return await _context.Tests
             .Include(t => t.Class)
                 .ThenInclude(c => c.Subject)
@@ -42,12 +42,19 @@ public class TestService : ITestService
 
     public async Task<List<Question>> GetTestQuestionsAsync(int testId)
     {
-        return await _context.TestQuestions
+        // Get question IDs for this test
+        var questionIds = await _context.TestQuestions
             .Where(tq => tq.TestId == testId)
-            .Include(tq => tq.Question)
-                .ThenInclude(q => q.Answers)
-            .Select(tq => tq.Question)
+            .Select(tq => tq.QuestionId)
             .ToListAsync();
+
+        // Load questions with answers directly
+        var questions = await _context.Questions
+            .Where(q => questionIds.Contains(q.QuestionId))
+            .Include(q => q.Answers)
+            .ToListAsync();
+
+        return questions;
     }
 
     public async Task<int> GetTestQuestionCountAsync(int testId)
@@ -82,7 +89,7 @@ public class TestService : ITestService
                 tq.TestId = test.TestId;
                 _context.TestQuestions.Add(tq);
             }
-            
+
             await _context.SaveChangesAsync();
             return true;
         }

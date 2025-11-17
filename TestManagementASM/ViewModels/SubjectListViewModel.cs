@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using TestManagementASM.Commands;
 using TestManagementASM.Models;
 using TestManagementASM.Services.Interfaces;
 using TestManagementASM.ViewModels.Base;
@@ -49,6 +50,8 @@ public class SubjectListViewModel : ViewModelBase
     public ICommand DeleteCommand { get; }
     public ICommand RefreshCommand { get; }
 
+    public event Action<SubjectFormViewModel>? OnShowSubjectForm;
+
     public SubjectListViewModel(ISubjectService subjectService)
     {
         _subjectService = subjectService;
@@ -91,14 +94,20 @@ public class SubjectListViewModel : ViewModelBase
 
     private void AddSubject()
     {
-        MessageBox.Show("Chức năng thêm môn học sẽ được triển khai sau!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+        var formVm = new SubjectFormViewModel(_subjectService);
+        formVm.InitializeForCreate();
+        formVm.OnClosed += async () => await LoadSubjectsAsync();
+        OnShowSubjectForm?.Invoke(formVm);
     }
 
     private void EditSubject()
     {
         if (SelectedSubject != null)
         {
-            MessageBox.Show($"Chức năng sửa môn học '{SelectedSubject.SubjectName}' sẽ được triển khai sau!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            var formVm = new SubjectFormViewModel(_subjectService);
+            formVm.InitializeForEdit(SelectedSubject);
+            formVm.OnClosed += async () => await LoadSubjectsAsync();
+            OnShowSubjectForm?.Invoke(formVm);
         }
     }
 

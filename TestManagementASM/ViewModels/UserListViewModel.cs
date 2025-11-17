@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using TestManagementASM.Commands;
 using TestManagementASM.Models;
 using TestManagementASM.Services.Interfaces;
 using TestManagementASM.ViewModels.Base;
@@ -46,6 +47,11 @@ public class UserListViewModel : ViewModelBase
     public ICommand LoadDataCommand { get; }
     public ICommand RefreshCommand { get; }
     public ICommand ViewDetailsCommand { get; }
+    public ICommand AddCommand { get; }
+    public ICommand EditCommand { get; }
+    public ICommand DeleteCommand { get; }
+
+    public event Action<UserFormViewModel>? OnShowUserForm;
 
     public UserListViewModel(IUserService userService)
     {
@@ -54,6 +60,9 @@ public class UserListViewModel : ViewModelBase
         LoadDataCommand = new RelayCommand(async () => await LoadUsersAsync());
         RefreshCommand = new RelayCommand(async () => await LoadUsersAsync());
         ViewDetailsCommand = new RelayCommand(ViewUserDetails, () => SelectedUser != null);
+        AddCommand = new RelayCommand(AddUser);
+        EditCommand = new RelayCommand(EditUser, () => SelectedUser != null);
+        DeleteCommand = new RelayCommand(async () => await DeleteUserAsync(), () => SelectedUser != null);
 
         _ = LoadUsersAsync();
     }
@@ -99,6 +108,64 @@ public class UserListViewModel : ViewModelBase
                          $"Ngày tạo: {SelectedUser.CreatedAt?.ToString("dd/MM/yyyy HH:mm") ?? "N/A"}";
 
             MessageBox.Show(details, "Chi tiết người dùng", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+    }
+
+    private void AddUser()
+    {
+        var formVm = new UserFormViewModel(_userService);
+        formVm.InitializeForCreate();
+        formVm.OnClosed += async () =>
+        {
+            await LoadUsersAsync();
+        };
+        OnShowUserForm?.Invoke(formVm);
+    }
+
+    private void EditUser()
+    {
+        if (SelectedUser != null)
+        {
+            var formVm = new UserFormViewModel(_userService);
+            formVm.InitializeForEdit(SelectedUser);
+            formVm.OnClosed += async () =>
+            {
+                await LoadUsersAsync();
+            };
+            OnShowUserForm?.Invoke(formVm);
+        }
+    }
+
+    private async Task DeleteUserAsync()
+    {
+        if (SelectedUser == null)
+            return;
+
+        var result = MessageBox.Show(
+            $"Bạn có chắc chắn muốn xóa người dùng '{SelectedUser.Username}'?",
+            "Xác nhận xóa",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+
+        if (result == MessageBoxResult.Yes)
+        {
+            try
+            {
+                var success = await _userService.DeleteUserAsync(SelectedUser.UserId);
+                if (success)
+                {
+                    MessageBox.Show("Xóa người dùng thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
+                    await LoadUsersAsync();
+                }
+                else
+                {
+                    MessageBox.Show("Xóa người dùng thất bại!", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi xóa người dùng: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

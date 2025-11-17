@@ -6,6 +6,7 @@ public interface ITestAttemptService
 {
     Task<TestAttempt> CreateAttemptAsync(int studentId, int testId);
     Task<bool> SaveStudentAnswerAsync(int attemptId, int questionId, int answerId);
+    Task<bool> SaveStudentAnswersAsync(int attemptId, int questionId, List<int> answerIds);
     Task<bool> CompleteAttemptAsync(int attemptId);
     Task<List<TestAttempt>> GetStudentAttemptsAsync(int studentId, int? classId = null);
     Task<List<TestAttempt>> GetClassTestScoresAsync(int classId);

@@ -23,7 +23,7 @@ public class TakeTestViewModel : ViewModelBase
     private ObservableCollection<Question> _questions = new();
     private int _currentQuestionIndex;
     private TimeSpan _remainingTime;
-    private Dictionary<int, int> _studentAnswers = new(); // QuestionId -> AnswerId
+    private Dictionary<int, HashSet<int>> _studentAnswers = new(); // QuestionId -> Set of AnswerIds
     private bool _isSubmitting;
 
     public Test? CurrentTest
@@ -81,6 +81,7 @@ public class TakeTestViewModel : ViewModelBase
     public ICommand NextQuestionCommand { get; }
     public ICommand PreviousQuestionCommand { get; }
     public ICommand SelectAnswerCommand { get; }
+    public ICommand ToggleAnswerCommand { get; }
     public ICommand SubmitTestCommand { get; }
 
     public TakeTestViewModel(
@@ -104,7 +105,14 @@ public class TakeTestViewModel : ViewModelBase
 
         NextQuestionCommand = new RelayCommand(NextQuestion, () => CanGoNext);
         PreviousQuestionCommand = new RelayCommand(PreviousQuestion, () => CanGoPrevious);
-        SelectAnswerCommand = new RelayCommand(param => SelectAnswer((int)param!));
+        SelectAnswerCommand = new RelayCommand(param =>
+        {
+            if (param != null) SelectAnswer((int)param);
+        });
+        ToggleAnswerCommand = new RelayCommand(param =>
+        {
+            if (param != null) ToggleAnswer((int)param);
+        });
         SubmitTestCommand = new RelayCommand(async () => await SubmitTestAsync());
 
         _ = InitializeTestAsync();
@@ -211,14 +219,53 @@ public class TakeTestViewModel : ViewModelBase
 
         try
         {
-            // Save answer locally
-            _studentAnswers[CurrentQuestion.QuestionId] = answerId;
+            // For SINGLE choice: Replace answer
+            _studentAnswers[CurrentQuestion.QuestionId] = new HashSet<int> { answerId };
 
             // Save to database
             await _testAttemptService.SaveStudentAnswerAsync(
                 _currentAttempt.AttemptId,
                 CurrentQuestion.QuestionId,
                 answerId);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Lỗi khi lưu câu trả lời: {ex.Message}", "Lỗi",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void ToggleAnswer(int answerId)
+    {
+        if (CurrentQuestion == null || _currentAttempt == null)
+            return;
+
+        try
+        {
+            // For MULTIPLE choice: Toggle answer
+            if (!_studentAnswers.ContainsKey(CurrentQuestion.QuestionId))
+            {
+                _studentAnswers[CurrentQuestion.QuestionId] = new HashSet<int>();
+            }
+
+            var answers = _studentAnswers[CurrentQuestion.QuestionId];
+            if (answers.Contains(answerId))
+            {
+                answers.Remove(answerId);
+            }
+            else
+            {
+                answers.Add(answerId);
+            }
+
+            // Save to database
+            await _testAttemptService.SaveStudentAnswersAsync(
+                _currentAttempt.AttemptId,
+                CurrentQuestion.QuestionId,
+                answers.ToList());
+
+            // Notify UI to update checkboxes
+            OnPropertyChanged(nameof(CurrentQuestion));
         }
         catch (Exception ex)
         {
@@ -237,8 +284,9 @@ public class TakeTestViewModel : ViewModelBase
             IsSubmitting = true;
             StopTimer();
 
+            int answeredCount = _studentAnswers.Count(kvp => kvp.Value.Count > 0);
             var result = MessageBox.Show(
-                $"Bạn đã trả lời {_studentAnswers.Count}/{Questions.Count} câu hỏi.\n\nBạn có chắc chắn muốn nộp bài?",
+                $"Bạn đã trả lời {answeredCount}/{Questions.Count} câu hỏi.\n\nBạn có chắc chắn muốn nộp bài?",
                 "Xác nhận nộp bài",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
@@ -287,6 +335,19 @@ public class TakeTestViewModel : ViewModelBase
 
     public int GetSelectedAnswerId(int questionId)
     {
-        return _studentAnswers.TryGetValue(questionId, out int answerId) ? answerId : 0;
+        if (_studentAnswers.TryGetValue(questionId, out var answerIds) && answerIds.Count > 0)
+        {
+            return answerIds.First();
+        }
+        return 0;
+    }
+
+    public bool IsAnswerSelected(int questionId, int answerId)
+    {
+        if (_studentAnswers.TryGetValue(questionId, out var answerIds))
+        {
+            return answerIds.Contains(answerId);
+        }
+        return false;
     }
 }

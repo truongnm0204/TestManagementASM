@@ -40,6 +40,7 @@ public class MainViewModel : ViewModelBase
 
     public ICommand NavigateToSubjectsCommand { get; }
     public ICommand NavigateToUsersCommand { get; }
+    public ICommand NavigateToClassesCommand { get; }
     public ICommand NavigateToStudentTestsCommand { get; }
     public ICommand NavigateToTeacherClassesCommand { get; }
     public ICommand NavigateToTeacherTestsCommand { get; }
@@ -60,6 +61,7 @@ public class MainViewModel : ViewModelBase
 
         NavigateToSubjectsCommand = new NavigateCommand<SubjectListViewModel>(navigationService);
         NavigateToUsersCommand = new NavigateCommand<UserListViewModel>(navigationService);
+        NavigateToClassesCommand = new NavigateCommand<ClassListViewModel>(navigationService);
         NavigateToStudentTestsCommand = new NavigateCommand<StudentTestListViewModel>(navigationService);
         NavigateToTeacherClassesCommand = new NavigateCommand<TeacherClassListViewModel>(navigationService);
         NavigateToTeacherTestsCommand = new NavigateCommand<TeacherTestListViewModel>(navigationService);

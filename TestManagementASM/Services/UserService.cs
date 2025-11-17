@@ -76,4 +76,23 @@ public class UserService : IUserService
             return false;
         }
     }
+
+    public async Task<List<User>> GetTeachersByRoleAsync()
+    {
+        return await _context.Users
+            .Where(u => u.RoleId == 2) // RoleId 2 = Teacher
+            .Include(u => u.Role)
+            .OrderBy(u => u.FullName)
+            .ToListAsync();
+    }
+
+    public async Task<bool> IsUsernameUniqueAsync(string username, int? excludeUserId = null)
+    {
+        var query = _context.Users.Where(u => u.Username == username);
+
+        if (excludeUserId.HasValue)
+            query = query.Where(u => u.UserId != excludeUserId.Value);
+
+        return !await query.AnyAsync();
+    }
 }

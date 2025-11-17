@@ -10,6 +10,7 @@
         xmlns:views="clr-namespace:TestManagementASM.Views"
         xmlns:studentviews="clr-namespace:TestManagementASM.Views.Student"
         xmlns:teacherviews="clr-namespace:TestManagementASM.Views.Teacher"
+        xmlns:adminviews="clr-namespace:TestManagementASM.Views.Admin"
         mc:Ignorable="d"
         Title="Hệ thống Quản lý Bài kiểm tra"
         Height="700"
@@ -24,6 +25,12 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewmodels:UserListViewModel}">
             <views:UserListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:ClassListViewModel}">
+            <adminviews:ClassListView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodels:TeacherAssignmentViewModel}">
+            <adminviews:TeacherAssignmentDialog/>
         </DataTemplate>
 
         <!-- Student ViewModels -->
@@ -126,6 +133,18 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Command="{Binding NavigateToClassesCommand}"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Visibility="{Binding CurrentUserRoleId, Converter={StaticResource RoleToVisibilityConverter}, ConverterParameter=1}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🏫"
+                                       FontSize="18"
+                                       Margin="0,0,10,0"/>
+                            <TextBlock Text="Quản lý lớp học"
+                                       FontSize="14"/>
+                        </StackPanel>
+                    </Button>
+
                     <!-- Teacher Menus -->
                     <Button Command="{Binding NavigateToTeacherClassesCommand}"
                             Style="{StaticResource SidebarButtonStyle}"
@@ -172,38 +191,6 @@
                                        FontSize="18"
                                        Margin="0,0,10,0"/>
                             <TextBlock Text="Bài thi của tôi"
-                                       FontSize="14"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Separator Margin="15,20"
-                               Background="#42A5F5"
-                               Visibility="{Binding IsStudent, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-
-                    <TextBlock Text="CÁC CHỨC NĂNG KHÁC"
-                               Foreground="#B3E5FC"
-                               FontSize="11"
-                               FontWeight="SemiBold"
-                               Margin="20,0,0,10"/>
-
-                    <Button IsEnabled="False"
-                            Style="{StaticResource SidebarButtonStyle}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="📝"
-                                       FontSize="18"
-                                       Margin="0,0,10,0"/>
-                            <TextBlock Text="Quản lý bài kiểm tra"
-                                       FontSize="14"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button IsEnabled="False"
-                            Style="{StaticResource SidebarButtonStyle}">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="❓"
-                                       FontSize="18"
-                                       Margin="0,0,10,0"/>
-                            <TextBlock Text="Ngân hàng câu hỏi"
                                        FontSize="14"/>
                         </StackPanel>
                     </Button>

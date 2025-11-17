@@ -9,4 +9,6 @@ public interface IUserService
     Task<bool> AddUserAsync(User user);
     Task<bool> UpdateUserAsync(User user);
     Task<bool> DeleteUserAsync(int id);
+    Task<List<User>> GetTeachersByRoleAsync();
+    Task<bool> IsUsernameUniqueAsync(string username, int? excludeUserId = null);
 }

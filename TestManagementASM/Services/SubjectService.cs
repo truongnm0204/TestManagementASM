@@ -77,4 +77,20 @@ public class SubjectService : ISubjectService
             return false;
         }
     }
+
+    public async Task<bool> HasClassesAsync(int subjectId)
+    {
+        return await _context.Classes
+            .AnyAsync(c => c.SubjectId == subjectId);
+    }
+
+    public async Task<bool> IsSubjectCodeUniqueAsync(string subjectCode, int? excludeSubjectId = null)
+    {
+        var query = _context.Subjects.Where(s => s.SubjectCode == subjectCode);
+
+        if (excludeSubjectId.HasValue)
+            query = query.Where(s => s.SubjectId != excludeSubjectId.Value);
+
+        return !await query.AnyAsync();
+    }
 }

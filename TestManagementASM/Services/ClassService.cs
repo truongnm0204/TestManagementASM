@@ -42,5 +42,62 @@ public class ClassService : IClassService
             .Select(e => e.Student)
             .ToListAsync();
     }
+
+    public async Task<List<Class>> GetAllClassesAsync()
+    {
+        return await _context.Classes
+            .Include(c => c.Subject)
+            .Include(c => c.Enrollments)
+            .Include(c => c.TeachingAssignments)
+                .ThenInclude(ta => ta.Teacher)
+            .OrderByDescending(c => c.ClassId)
+            .ToListAsync();
+    }
+
+    public async Task<bool> AddClassAsync(Class @class)
+    {
+        try
+        {
+            _context.Classes.Add(@class);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> UpdateClassAsync(Class @class)
+    {
+        try
+        {
+            _context.Classes.Update(@class);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteClassAsync(int classId)
+    {
+        try
+        {
+            var @class = await _context.Classes.FindAsync(classId);
+            if (@class == null)
+                return false;
+
+            _context.Classes.Remove(@class);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
 }
 
