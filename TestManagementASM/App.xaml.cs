@@ -19,7 +19,6 @@ public partial class App : Application
     private readonly SelectedQuestionStore _selectedQuestionStore;
     private readonly SelectedClassStore _selectedClassStore;
     private readonly SelectedStudentStore _selectedStudentStore;
-    private readonly TestManagementDbContext _dbContext;
 
     public App()
     {
@@ -29,22 +28,21 @@ public partial class App : Application
         _selectedQuestionStore = new SelectedQuestionStore();
         _selectedClassStore = new SelectedClassStore();
         _selectedStudentStore = new SelectedStudentStore();
-        _dbContext = new TestManagementDbContext();
     }
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
 
-        // Create services
-        IAuthenticationService authService = new AuthenticationService(_dbContext, _authStore);
-        ISubjectService subjectService = new SubjectService(_dbContext, _authStore);
-        IUserService userService = new UserService(_dbContext);
-        ITestService testService = new TestService(_dbContext);
-        IQuestionService questionService = new QuestionService(_dbContext);
-        ITestAttemptService testAttemptService = new TestAttemptService(_dbContext);
-        IClassService classService = new ClassService(_dbContext);
-        IEnrollmentService enrollmentService = new EnrollmentService(_dbContext);
+        // Create services - each with its own DbContext to avoid concurrency issues
+        IAuthenticationService authService = new AuthenticationService(new TestManagementDbContext(), _authStore);
+        ISubjectService subjectService = new SubjectService(new TestManagementDbContext(), _authStore);
+        IUserService userService = new UserService(new TestManagementDbContext());
+        ITestService testService = new TestService(new TestManagementDbContext());
+        IQuestionService questionService = new QuestionService(new TestManagementDbContext());
+        ITestAttemptService testAttemptService = new TestAttemptService(new TestManagementDbContext());
+        IClassService classService = new ClassService(new TestManagementDbContext());
+        IEnrollmentService enrollmentService = new EnrollmentService(new TestManagementDbContext());
 
         // Create navigation service with ViewModel factory
         INavigationService navigationService = new NavigationService(
@@ -67,15 +65,21 @@ public partial class App : Application
             try
             {
                 var mainViewModel = new MainViewModel(_navigationStore, _authStore, navigationService, authService);
+
                 var mainWindow = new MainWindow
                 {
                     DataContext = mainViewModel
                 };
+
+                // Set MainWindow as the main window and change shutdown mode
+                Current.MainWindow = mainWindow;
+                Current.ShutdownMode = ShutdownMode.OnMainWindowClose;
+
                 mainWindow.Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Lỗi khi mở MainWindow: {ex.Message}\n\n{ex.StackTrace}",
+                MessageBox.Show($"Lỗi khi mở MainWindow: {ex.Message}\n\nStackTrace:\n{ex.StackTrace}\n\nInnerException: {ex.InnerException?.Message}",
                     "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 Shutdown();
             }
@@ -102,18 +106,16 @@ public partial class App : Application
 
     private ViewModelBase CreateViewModel(Type viewModelType)
     {
-        // Create a NEW DbContext instance for each ViewModel to avoid disposed context issues
-        var dbContext = new TestManagementDbContext();
-
-        // Services needed for ViewModels
-        IAuthenticationService authService = new AuthenticationService(dbContext, _authStore);
-        ISubjectService subjectService = new SubjectService(dbContext, _authStore);
-        IUserService userService = new UserService(dbContext);
-        ITestService testService = new TestService(dbContext);
-        IQuestionService questionService = new QuestionService(dbContext);
-        ITestAttemptService testAttemptService = new TestAttemptService(dbContext);
-        IClassService classService = new ClassService(dbContext);
-        IEnrollmentService enrollmentService = new EnrollmentService(dbContext);
+        // Create separate DbContext instances for each service to avoid concurrency issues
+        // Each service gets its own DbContext to prevent threading conflicts
+        IAuthenticationService authService = new AuthenticationService(new TestManagementDbContext(), _authStore);
+        ISubjectService subjectService = new SubjectService(new TestManagementDbContext(), _authStore);
+        IUserService userService = new UserService(new TestManagementDbContext());
+        ITestService testService = new TestService(new TestManagementDbContext());
+        IQuestionService questionService = new QuestionService(new TestManagementDbContext());
+        ITestAttemptService testAttemptService = new TestAttemptService(new TestManagementDbContext());
+        IClassService classService = new ClassService(new TestManagementDbContext());
+        IEnrollmentService enrollmentService = new EnrollmentService(new TestManagementDbContext());
         INavigationService navigationService = new NavigationService(_navigationStore, CreateViewModel);
 
         // Factory method to create ViewModels
@@ -179,7 +181,7 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        _dbContext?.Dispose();
+        // DbContext instances are now created per-service and will be garbage collected
         base.OnExit(e);
     }
 }

@@ -86,6 +86,30 @@
                 </Style.Triggers>
         </Style>
 
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox"
+               TargetType="ComboBox">
+                <Setter Property="Height"
+                        Value="40"/>
+                <Setter Property="Padding"
+                        Value="10,0"/>
+                <Setter Property="FontSize"
+                        Value="14"/>
+                <Setter Property="BorderBrush"
+                        Value="#DDDDDD"/>
+                <Setter Property="BorderThickness"
+                        Value="1"/>
+                <Setter Property="VerticalContentAlignment"
+                        Value="Center"/>
+                <Style.Triggers>
+                        <Trigger Property="IsFocused"
+                                 Value="True">
+                                <Setter Property="BorderBrush"
+                                        Value="#2196F3"/>
+                        </Trigger>
+                </Style.Triggers>
+        </Style>
+
         <!-- Primary Button Style -->
         <Style x:Key="PrimaryButton"
                TargetType="Button">
@@ -125,6 +149,21 @@
                                  Value="False">
                                 <Setter Property="Background"
                                         Value="#CCCCCC"/>
+                        </Trigger>
+                </Style.Triggers>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style x:Key="SecondaryButton"
+               TargetType="Button"
+               BasedOn="{StaticResource PrimaryButton}">
+                <Setter Property="Background"
+                        Value="#6c757d"/>
+                <Style.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                                <Setter Property="Background"
+                                        Value="#5a6268"/>
                         </Trigger>
                 </Style.Triggers>
         </Style>
