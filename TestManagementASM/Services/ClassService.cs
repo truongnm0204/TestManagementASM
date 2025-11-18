@@ -72,12 +72,28 @@ public class ClassService : IClassService
     {
         try
         {
-            _context.Classes.Update(@class);
+            // Attach the class to the context if it's not already tracked
+            var existingClass = await _context.Classes.FindAsync(@class.ClassId);
+            if (existingClass != null)
+            {
+                // Update properties
+                existingClass.ClassName = @class.ClassName;
+                existingClass.SubjectId = @class.SubjectId;
+                existingClass.Semester = @class.Semester;
+
+                _context.Classes.Update(existingClass);
+            }
+            else
+            {
+                _context.Classes.Update(@class);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"UpdateClassAsync Error: {ex.Message}");
             return false;
         }
     }

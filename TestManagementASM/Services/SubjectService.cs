@@ -50,12 +50,28 @@ public class SubjectService : ISubjectService
     {
         try
         {
-            _context.Subjects.Update(subject);
+            // Attach the subject to the context if it's not already tracked
+            var existingSubject = await _context.Subjects.FindAsync(subject.SubjectId);
+            if (existingSubject != null)
+            {
+                // Update properties
+                existingSubject.SubjectCode = subject.SubjectCode;
+                existingSubject.SubjectName = subject.SubjectName;
+                existingSubject.Status = subject.Status;
+
+                _context.Subjects.Update(existingSubject);
+            }
+            else
+            {
+                _context.Subjects.Update(subject);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"UpdateSubjectAsync Error: {ex.Message}");
             return false;
         }
     }

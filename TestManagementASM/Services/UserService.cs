@@ -33,7 +33,8 @@ public class UserService : IUserService
     {
         try
         {
-            user.PasswordHash = PasswordHasher.HashPassword(user.PasswordHash);
+            // Password should already be hashed by the caller (UserFormView.xaml.cs)
+            // Do NOT hash again to avoid double hashing
             user.CreatedAt = DateTime.Now;
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -49,12 +50,30 @@ public class UserService : IUserService
     {
         try
         {
-            _context.Users.Update(user);
+            // Attach the user to the context if it's not already tracked
+            var existingUser = await _context.Users.FindAsync(user.UserId);
+            if (existingUser != null)
+            {
+                // Update properties
+                existingUser.Username = user.Username;
+                existingUser.FullName = user.FullName;
+                existingUser.Email = user.Email;
+                existingUser.RoleId = user.RoleId;
+                existingUser.Status = user.Status;
+
+                _context.Users.Update(existingUser);
+            }
+            else
+            {
+                _context.Users.Update(user);
+            }
+
             await _context.SaveChangesAsync();
             return true;
         }
-        catch
+        catch (Exception ex)
         {
+            System.Diagnostics.Debug.WriteLine($"UpdateUserAsync Error: {ex.Message}");
             return false;
         }
     }

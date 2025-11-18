@@ -26,7 +26,13 @@ public class ClassListViewModel : ViewModelBase
     public Class? SelectedClass
     {
         get => _selectedClass;
-        set => SetProperty(ref _selectedClass, value);
+        set
+        {
+            SetProperty(ref _selectedClass, value);
+            // Trigger CanExecuteChanged for Edit and Delete commands
+            _editCommand?.RaiseCanExecuteChanged();
+            _deleteCommand?.RaiseCanExecuteChanged();
+        }
     }
 
     public string SearchText
@@ -48,10 +54,13 @@ public class ClassListViewModel : ViewModelBase
     public ICommand LoadDataCommand { get; }
     public ICommand RefreshCommand { get; }
     public ICommand AddCommand { get; }
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand EditCommand { get; private set; }
+    public ICommand DeleteCommand { get; private set; }
 
     public event Action<ClassFormViewModel>? OnShowClassForm;
+
+    private RelayCommand? _editCommand;
+    private RelayCommand? _deleteCommand;
 
     public ClassListViewModel(IClassService classService, ISubjectService subjectService)
     {
@@ -61,8 +70,10 @@ public class ClassListViewModel : ViewModelBase
         LoadDataCommand = new RelayCommand(async () => await LoadClassesAsync());
         RefreshCommand = new RelayCommand(async () => await LoadClassesAsync());
         AddCommand = new RelayCommand(AddClass);
-        EditCommand = new RelayCommand(EditClass, () => SelectedClass != null);
-        DeleteCommand = new RelayCommand(async () => await DeleteClassAsync(), () => SelectedClass != null);
+        _editCommand = new RelayCommand(EditClass, () => SelectedClass != null);
+        _deleteCommand = new RelayCommand(async () => await DeleteClassAsync(), () => SelectedClass != null);
+        EditCommand = _editCommand;
+        DeleteCommand = _deleteCommand;
 
         _ = LoadClassesAsync();
     }

@@ -25,7 +25,13 @@ public class UserListViewModel : ViewModelBase
     public User? SelectedUser
     {
         get => _selectedUser;
-        set => SetProperty(ref _selectedUser, value);
+        set
+        {
+            SetProperty(ref _selectedUser, value);
+            // Trigger CanExecuteChanged for Edit and Delete commands
+            _editCommand?.RaiseCanExecuteChanged();
+            _deleteCommand?.RaiseCanExecuteChanged();
+        }
     }
 
     public string SearchText
@@ -48,10 +54,13 @@ public class UserListViewModel : ViewModelBase
     public ICommand RefreshCommand { get; }
     public ICommand ViewDetailsCommand { get; }
     public ICommand AddCommand { get; }
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand EditCommand { get; private set; }
+    public ICommand DeleteCommand { get; private set; }
 
     public event Action<UserFormViewModel>? OnShowUserForm;
+
+    private RelayCommand? _editCommand;
+    private RelayCommand? _deleteCommand;
 
     public UserListViewModel(IUserService userService)
     {
@@ -61,8 +70,10 @@ public class UserListViewModel : ViewModelBase
         RefreshCommand = new RelayCommand(async () => await LoadUsersAsync());
         ViewDetailsCommand = new RelayCommand(ViewUserDetails, () => SelectedUser != null);
         AddCommand = new RelayCommand(AddUser);
-        EditCommand = new RelayCommand(EditUser, () => SelectedUser != null);
-        DeleteCommand = new RelayCommand(async () => await DeleteUserAsync(), () => SelectedUser != null);
+        _editCommand = new RelayCommand(EditUser, () => SelectedUser != null);
+        _deleteCommand = new RelayCommand(async () => await DeleteUserAsync(), () => SelectedUser != null);
+        EditCommand = _editCommand;
+        DeleteCommand = _deleteCommand;
 
         _ = LoadUsersAsync();
     }

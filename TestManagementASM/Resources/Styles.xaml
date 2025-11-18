@@ -11,6 +11,7 @@
         <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
         <converters:RoleToVisibilityConverter x:Key="RoleToVisibilityConverter"/>
         <converters:MultiRoleToVisibilityConverter x:Key="MultiRoleToVisibilityConverter"/>
+        <converters:IntToBoolConverter x:Key="IntToBoolConverter"/>
 
         <!-- Sidebar Button Style -->
         <Style x:Key="SidebarButtonStyle"

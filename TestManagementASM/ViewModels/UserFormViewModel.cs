@@ -107,6 +107,14 @@ public class UserFormViewModel : ViewModelBase
 
             if (IsEditMode)
             {
+                // Check if username is unique (excluding current user)
+                var isUnique = await _userService.IsUsernameUniqueAsync(User.Username, User.UserId);
+                if (!isUnique)
+                {
+                    ErrorMessage = "Username đã tồn tại!";
+                    return;
+                }
+
                 await _userService.UpdateUserAsync(User);
                 MessageBox.Show("Cập nhật người dùng thành công!", "Thành công", MessageBoxButton.OK, MessageBoxImage.Information);
             }

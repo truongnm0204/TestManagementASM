@@ -3,35 +3,65 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="White">
     <Grid Margin="20">
-        <StackPanel VerticalAlignment="Center" MaxWidth="400">
+        <StackPanel VerticalAlignment="Center"
+                MaxWidth="400">
             <!-- Title -->
             <TextBlock Text="{Binding IsEditMode, StringFormat='Cập nhật môn học|Tạo môn học mới'}"
-                       FontSize="18" FontWeight="Bold" Foreground="#333333" Margin="0,0,0,20"/>
+                       FontSize="18"
+                    FontWeight="Bold"
+                    Foreground="#333333"
+                    Margin="0,0,0,20"/>
 
             <!-- Error Message -->
-            <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" TextWrapping="Wrap" Margin="0,0,0,10"
+            <TextBlock Text="{Binding ErrorMessage}"
+                    Foreground="Red"
+                    TextWrapping="Wrap"
+                    Margin="0,0,0,10"
                        Visibility="{Binding ErrorMessage, Converter={StaticResource StringToVisibilityConverter}}"/>
 
             <!-- Subject Code -->
-            <TextBlock Text="Mã môn học:" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+            <TextBlock Text="Mã môn học:"
+                    FontSize="12"
+                    Foreground="#666666"
+                    Margin="0,0,0,5"/>
             <TextBox Text="{Binding Subject.SubjectCode, UpdateSourceTrigger=PropertyChanged}"
-                     Padding="10" FontSize="12" Margin="0,0,0,15"
-                     IsEnabled="{Binding IsEditMode, Converter={StaticResource InvertBoolConverter}}"/>
+                     Padding="10"
+                    FontSize="12"
+                    Margin="0,0,0,15"
+                     IsEnabled="{Binding IsEditMode, Converter={StaticResource InverseBooleanConverter}}"/>
 
             <!-- Subject Name -->
-            <TextBlock Text="Tên môn học:" FontSize="12" Foreground="#666666" Margin="0,0,0,5"/>
+            <TextBlock Text="Tên môn học:"
+                    FontSize="12"
+                    Foreground="#666666"
+                    Margin="0,0,0,5"/>
             <TextBox Text="{Binding Subject.SubjectName, UpdateSourceTrigger=PropertyChanged}"
-                     Padding="10" FontSize="12" Margin="0,0,0,15"/>
+                     Padding="10"
+                    FontSize="12"
+                    Margin="0,0,0,15"/>
 
             <!-- Status -->
-            <CheckBox Content="Hoạt động" IsChecked="{Binding Subject.Status}" Margin="0,0,0,20"/>
+            <CheckBox Content="Hoạt động"
+                    IsChecked="{Binding Subject.Status}"
+                    Margin="0,0,0,20"/>
 
             <!-- Buttons -->
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,0,0">
-                <Button Command="{Binding SaveCommand}" Content="Lưu" 
-                        Padding="15,8" Margin="0,0,10,0" Background="#4CAF50" Foreground="White" FontSize="12"/>
-                <Button Command="{Binding CancelCommand}" Content="Hủy" 
-                        Padding="15,8" Background="#f44336" Foreground="White" FontSize="12"/>
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,0,0">
+                <Button Command="{Binding SaveCommand}"
+                        Content="Lưu"
+                        Padding="15,8"
+                        Margin="0,0,10,0"
+                        Background="#4CAF50"
+                        Foreground="White"
+                        FontSize="12"/>
+                <Button Command="{Binding CancelCommand}"
+                        Content="Hủy"
+                        Padding="15,8"
+                        Background="#f44336"
+                        Foreground="White"
+                        FontSize="12"/>
             </StackPanel>
         </StackPanel>
     </Grid>

@@ -25,7 +25,13 @@ public class SubjectListViewModel : ViewModelBase
     public Subject? SelectedSubject
     {
         get => _selectedSubject;
-        set => SetProperty(ref _selectedSubject, value);
+        set
+        {
+            SetProperty(ref _selectedSubject, value);
+            // Trigger CanExecuteChanged for Edit and Delete commands
+            _editCommand?.RaiseCanExecuteChanged();
+            _deleteCommand?.RaiseCanExecuteChanged();
+        }
     }
 
     public string SearchText
@@ -46,11 +52,14 @@ public class SubjectListViewModel : ViewModelBase
 
     public ICommand LoadDataCommand { get; }
     public ICommand AddCommand { get; }
-    public ICommand EditCommand { get; }
-    public ICommand DeleteCommand { get; }
+    public ICommand EditCommand { get; private set; }
+    public ICommand DeleteCommand { get; private set; }
     public ICommand RefreshCommand { get; }
 
     public event Action<SubjectFormViewModel>? OnShowSubjectForm;
+
+    private RelayCommand? _editCommand;
+    private RelayCommand? _deleteCommand;
 
     public SubjectListViewModel(ISubjectService subjectService)
     {
@@ -59,8 +68,10 @@ public class SubjectListViewModel : ViewModelBase
         LoadDataCommand = new RelayCommand(async () => await LoadSubjectsAsync());
         RefreshCommand = new RelayCommand(async () => await LoadSubjectsAsync());
         AddCommand = new RelayCommand(AddSubject);
-        EditCommand = new RelayCommand(EditSubject, () => SelectedSubject != null);
-        DeleteCommand = new RelayCommand(async () => await DeleteSubjectAsync(), () => SelectedSubject != null);
+        _editCommand = new RelayCommand(EditSubject, () => SelectedSubject != null);
+        _deleteCommand = new RelayCommand(async () => await DeleteSubjectAsync(), () => SelectedSubject != null);
+        EditCommand = _editCommand;
+        DeleteCommand = _deleteCommand;
 
         _ = LoadSubjectsAsync();
     }
